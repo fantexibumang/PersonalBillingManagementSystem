@@ -33,7 +33,8 @@ public class PersonalBillingManagementSystem {
         boolean running = true;
         while (running) {
             showMenu();
-            int choice = getUserChoice();
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
             switch (choice) {
                 case 1:
                     recordIncome();
@@ -42,11 +43,23 @@ public class PersonalBillingManagementSystem {
                     recordExpense();
                     break;
                 case 3:
+                    viewAllBills();
+                    break;
+                case 4:
+                    queryBill();
+                    break;
+                case 5:
+                    setMonthlyBudget();
+                    break;
+                case 6:
+                    viewMonthlyStatistics();
+                    break;
+                case 7:
                     running = false;
                     System.out.println("系统已退出。");
                     break;
                 default:
-                    System.out.println("无效选项，请重新选择。");
+                    System.out.println("无效选项，请重新输入。");
             }
         }
     }
@@ -59,7 +72,11 @@ public class PersonalBillingManagementSystem {
         System.out.println("请选择操作：");
         System.out.println("1. 记录收入");
         System.out.println("2. 记录支出");
-        System.out.println("3. 退出系统");
+        System.out.println("3. 查看所有账单");
+        System.out.println("4. 查询账单");
+        System.out.println("5. 设置月度预算");
+        System.out.println("6. 查看月度统计报告");
+        System.out.println("7. 退出系统");
         System.out.print("请输入选项序号：");
     }
 
@@ -141,10 +158,39 @@ public class PersonalBillingManagementSystem {
         return amount;
     }
 
+    private static void setMonthlyBudget() {
+        System.out.print("请输入每月预算限额：");
+        monthlyBudget = scanner.nextDouble();
+        System.out.println("月度预算已设置为：" + monthlyBudget);
+        promptReturnToMenu();
+    }
+
+    private static void viewMonthlyStatistics() {
+        double totalIncome = 0;
+        double totalExpense = 0;
+
+        for (Transaction income : incomeList) {
+            totalIncome += income.amount;
+        }
+
+        for (Transaction expense : expenseList) {
+            totalExpense += expense.amount;
+        }
+
+        double remainingBudget = monthlyBudget - totalExpense;
+        System.out.println("=================================");
+        System.out.println("月度统计报告：");
+        System.out.println("总收入：" + totalIncome);
+        System.out.println("总支出：" + totalExpense);
+        System.out.println("剩余可用预算：" + remainingBudget);
+        promptReturnToMenu();
+    }
+
     // 提示用户按任意键返回主菜单
     private static void promptReturnToMenu() {
         System.out.println("按任意键返回主菜单...");
         scanner.nextLine();
     }
 }
+//ps：2024.11.23修改
 
